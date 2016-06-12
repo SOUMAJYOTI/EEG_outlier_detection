@@ -1,0 +1,3 @@
+load dipole
+
+display(dipole);

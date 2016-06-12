@@ -1,0 +1,131 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BEARING FAULT ANALYSIS</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-12-30"><meta name="DC.source" content="bearingAnalysis_help.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>BEARING FAULT ANALYSIS</h1><!--introduction--><p>This program demonstrates how you can analyze the operation of a bearing, and how faults can be found by means of Signal Processing.</p><p><i>Created by Roni Peer</i>, Last Revision: <b>December 30th, 2011</b></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Why to use this program</a></li><li><a href="#3">Menus and Options</a></li><li><a href="#4">Bearing Fault type:</a></li><li><a href="#5">Rotation Speed</a></li><li><a href="#6">Analysis Type</a></li><li><a href="#7">Kurtosis Option</a></li><li><a href="#8">Filter for Envelope</a></li><li><a href="#9">Run Button</a></li><li><a href="#10">Plots and Axes</a></li><li><a href="#11">Top Left Graph</a></li><li><a href="#12">Top Right Graph</a></li><li><a href="#13">Central Graph</a></li><li><a href="#14">Bottom Graph</a></li></ul></div><h2>Why to use this program<a name="2"></a></h2><p>In order to fully leverage this program, I recommend reading some theory, as can be found on Wikipedia or other textbooks. This program takes a ball-bearing, simulates a fault in its inner or outer ring, and tries to show how you can view the fault, by means of finding the resonance frequencies.</p><h2>Menus and Options<a name="3"></a></h2><p>There are several key options you can select with this program.</p><h2>Bearing Fault type:<a name="4"></a></h2><p>On the right popup menu select between the <b>"Inner Ring"</b> or <b>"Outer Ring"</b> fault. An inner ring fault would generate a sinewave-like signal, an Outer ring fault would generate a pulsing signal.</p><h2>Rotation Speed<a name="5"></a></h2><p>A slider of the Rotation Speed (in RPM), in which the bearing is operating. Input range is between 1 and 2000.</p><h2>Analysis Type<a name="6"></a></h2><p>A pop-up menu to choose between 4 types of analysis: <b>Spectral Analysis, Kurtosis, Envelope, and Time/Frequency</b>.</p><h2>Kurtosis Option<a name="7"></a></h2><p>The Kurtosis option on the pop-up menu will generate 3 Kurtosis numbers (compatible with the 3 different resonances, of 120, 500, 1500 [rad/sec]), which will be shown below.</p><h2>Filter for Envelope<a name="8"></a></h2><p>The 'Filter For Envelope' button enables a band pass filter over a preset bandwidth of the envelope. To set the bandwidth press the <b>'Filter For Envelope'</b> button.  set the first band limit by dragging the cursor on the graph. press "Enter", a 2nd cursor will appear, set it up to the 2nd limit of the desired bandwidth.  press "Enter" again to get the filtered signal.</p><h2>Run Button<a name="9"></a></h2><p>The 'Run' button is needed to be pressed so that the changes we made will effect the calculations and graphs of the program.</p><h2>Plots and Axes<a name="10"></a></h2><p>You can view several different aspects of the bearing system at hand.</p><h2>Top Left Graph<a name="11"></a></h2><p>This graph shows the input signal - the signal measured at the faulty bearing.</p><h2>Top Right Graph<a name="12"></a></h2><p>This graph shows the BODE frequency-Magnitude plot of the system.</p><h2>Central Graph<a name="13"></a></h2><p>This graph shows the system response.</p><h2>Bottom Graph<a name="14"></a></h2><p>This graph shows the output of the selected analysis plot.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% BEARING FAULT ANALYSIS
+% This program demonstrates how you can analyze the operation of a bearing,
+% and how faults can be found by means of Signal Processing.
+%
+% _Created by Roni Peer_, Last Revision: *December 30th, 2011*
+%%
+
+%% Why to use this program
+% In order to fully leverage this program, I recommend reading some theory,
+% as can be found on Wikipedia or other textbooks. This program takes a
+% ball-bearing, simulates a fault in its inner or outer ring, and tries to
+% show how you can view the fault, by means of finding the resonance
+% frequencies.
+
+%% Menus and Options
+% There are several key options you can select with this program.
+%% Bearing Fault type:
+% On the right popup menu select between the *"Inner Ring"* or *"Outer
+% Ring"*
+% fault. An inner ring fault would generate a sinewave-like signal, an
+% Outer ring fault would generate a pulsing signal.
+%
+%% Rotation Speed
+% A slider of the Rotation Speed (in RPM), in which the bearing is
+% operating. Input range is between 1 and 2000.
+%
+%% Analysis Type
+% A pop-up menu to choose between 4 types of analysis: *Spectral Analysis,
+% Kurtosis, Envelope, and Time/Frequency*. 
+%
+%% Kurtosis Option
+% The Kurtosis option on the pop-up menu will generate 3 Kurtosis numbers
+% (compatible with the 3 different resonances, of 120, 500, 1500
+% [rad/sec]), which will be shown below. 
+%
+%% Filter for Envelope
+% The 'Filter For Envelope' button enables a band pass filter over a preset
+% bandwidth of the envelope. To set the bandwidth press the *'Filter For
+% Envelope'* button.  set the first band limit by dragging the cursor on the
+% graph. press "Enter", a 2nd cursor will appear, set it up to the 2nd
+% limit of the desired bandwidth.  press "Enter" again to get the filtered signal.
+%
+%% Run Button
+% The 'Run' button is needed to be pressed so that the changes we made will
+% effect the calculations and graphs of the program. 
+%
+%% Plots and Axes
+% You can view several different aspects of the bearing system at hand.
+%
+%% Top Left Graph
+% This graph shows the input signal - the signal measured at the faulty
+% bearing.
+%
+%% Top Right Graph
+% This graph shows the BODE frequency-Magnitude plot of the system.
+%
+%% Central Graph
+% This graph shows the system response.
+%
+%% Bottom Graph
+% This graph shows the output of the selected analysis plot.
+%
+##### SOURCE END #####
+--></body></html>
